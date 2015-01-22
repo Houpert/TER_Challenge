@@ -60,6 +60,8 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
     private ProgressBar progressBar;
     private TextView playerTextView;
 
+    private int[] squaresWon = new int[] {0,0,0,0};
+
     private int progress= 0;
 
 
