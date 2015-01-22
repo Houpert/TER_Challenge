@@ -1,5 +1,8 @@
 package ter.android.ter_challenge;
 
+import android.content.Context;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -8,6 +11,10 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
+
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import Domain.Trait;
 
@@ -22,6 +29,11 @@ public class GameActivity extends ActionBarActivity {
     private final String TAG = "Debug -- ";
     private int height;
     private int width;
+
+    private static int MS_ONE_SEC = 1000;
+    private long gameTime = 10 * MS_ONE_SEC;
+    private int soundVolume= 4;
+    private MediaPlayer mp;
 
     private RelativeLayout gameLayout;
 
@@ -53,6 +65,38 @@ public class GameActivity extends ActionBarActivity {
                 return true;//always return true to consume event
             }
         });
+
+    }
+
+    private void startTimer(){
+        mp = MediaPlayer.create(getBaseContext(), R.raw.clock);
+        mp.setVolume(soundVolume,soundVolume);
+        mp.start();
+
+        Timer timer = new Timer();
+        TimerTask tts = new TimerTask() {
+            @Override
+            public void run() {
+                gameTime -= MS_ONE_SEC;
+                if(soundVolume<15){
+                    soundVolume += 1;
+                }
+                mp.setVolume(soundVolume,soundVolume);
+
+                AudioManager mgr = (AudioManager) getBaseContext().getSystemService(Context.AUDIO_SERVICE);
+
+                mgr.setStreamVolume(AudioManager.STREAM_MUSIC, soundVolume, 0);
+
+                System.out.println(gameTime/MS_ONE_SEC);
+
+                if(gameTime==0){
+                    gameTime = 10 * MS_ONE_SEC;
+                    soundVolume = 4;
+                }
+            }
+        };
+        timer.scheduleAtFixedRate(tts,new Date(),1000);
+
     }
 
     @Override
