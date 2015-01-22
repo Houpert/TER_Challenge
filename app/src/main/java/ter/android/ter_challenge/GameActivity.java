@@ -176,11 +176,66 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
 
             int lineToPrint = dotsAndBoxes.addTrait(act,pointClick);
             if(lineToPrint > 0) {
+                drawTrait(lineToPrint);
                 Log.v(TAG, "" + isTouch + "--" + act.toString() + "--" + pointClick + "--" + lineToPrint);
                 turnEnd();
             }else{
                 //Turn not end error user
             }
+        }
+    }
+
+    private void drawTrait(int id) {
+        ImageView img;
+        switch (id) {
+            case 1:
+                img = (ImageView) findViewById(R.id.bar1);
+                img.setImageResource(R.drawable.bar_horizontal);
+                break;
+            case 2:
+                img = (ImageView) findViewById(R.id.bar2);
+                img.setImageResource(R.drawable.bar_horizontal);
+                break;
+            case 3:
+                img = (ImageView) findViewById(R.id.bar3);
+                img.setImageResource(R.drawable.bar_vertical);
+                break;
+            case 4:
+                img = (ImageView) findViewById(R.id.bar4);
+                img.setImageResource(R.drawable.bar_vertical);
+                break;
+            case 5:
+                img = (ImageView) findViewById(R.id.bar5);
+                img.setImageResource(R.drawable.bar_vertical);
+                break;
+            case 6:
+                img = (ImageView) findViewById(R.id.bar6);
+                img.setImageResource(R.drawable.bar_horizontal);
+                break;
+            case 7:
+                img = (ImageView) findViewById(R.id.bar7);
+                img.setImageResource(R.drawable.bar_horizontal);
+                break;
+            case 8:
+                img = (ImageView) findViewById(R.id.bar8);
+                img.setImageResource(R.drawable.bar_vertical);
+                break;
+            case 9:
+                img = (ImageView) findViewById(R.id.bar9);
+                img.setImageResource(R.drawable.bar_vertical);
+                break;
+            case 10:
+                img = (ImageView) findViewById(R.id.bar10);
+                img.setImageResource(R.drawable.bar_vertical);
+                break;
+            case 11:
+                img = (ImageView) findViewById(R.id.bar11);
+                img.setImageResource(R.drawable.bar_horizontal);
+                break;
+            case 12:
+                img = (ImageView) findViewById(R.id.bar12);
+                img.setImageResource(R.drawable.bar_horizontal);
+                break;
         }
     }
 
