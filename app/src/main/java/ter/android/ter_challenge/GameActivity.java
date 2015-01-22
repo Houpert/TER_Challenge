@@ -1,14 +1,13 @@
 package ter.android.ter_challenge;
 
 import android.content.Context;
-import android.graphics.PorterDuff;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.AudioManager;
-import android.media.Image;
 import android.media.MediaPlayer;
+import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -18,7 +17,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.GridLayout;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 import java.util.Date;
 import java.util.List;
@@ -35,10 +38,13 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
 
     private final String TAG = "Debug -- ";
 
+    private MediaPlayer mp;
+    private AudioManager mgr;
+    private Handler mHandler ;
+
     private static int MS_ONE_SEC = 1000;
     private long gameTime = 10 * MS_ONE_SEC;
     private int soundVolume= 4;
-    private MediaPlayer mp;
 
     private GridLayout gameLayout;
     private SensorManager mSensorManager;
@@ -50,6 +56,13 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
     private int pointClick = 0;
 
     private ImageView[] bars = new ImageView[13];
+
+    private ProgressBar progressBar;
+    private TextView playerTextView;
+
+    private int progress= 0;
+
+
     //private SensorManager sm = null;
 
     @Override
@@ -57,15 +70,22 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game_layout);
 
-
         DisplayMetrics displaymetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
 
         dotsAndBoxes = new DotsAndBoxes();
         dotsAndBoxes.initLogic();
 
+
         initSensor();
-        //startTimer();
+
+        initComp();
+        mHandler = new Handler();
+        mHandler.postDelayed(mUpdateTimeTask, 1000);
+        mp = MediaPlayer.create(getBaseContext(), R.raw.clock);
+        mgr = (AudioManager) getBaseContext().getSystemService(Context.AUDIO_SERVICE);
+        mgr.setStreamVolume(AudioManager.STREAM_MUSIC, soundVolume, 0);
+        mp.start();
     }
 
 
@@ -107,35 +127,49 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
         toast.show();
     }
 
-    private void startTimer(){
-        mp = MediaPlayer.create(getBaseContext(), R.raw.clock);
-        mp.setVolume(soundVolume, soundVolume);
-        mp.start();
-
-        Timer timer = new Timer();
-        TimerTask tts = new TimerTask() {
-            @Override
-            public void run() {
-                gameTime -= MS_ONE_SEC;
-                if(soundVolume<15){
-                    soundVolume += 1;
-                }
-                mp.setVolume(soundVolume,soundVolume);
-
-                AudioManager mgr = (AudioManager) getBaseContext().getSystemService(Context.AUDIO_SERVICE);
-
-                mgr.setStreamVolume(AudioManager.STREAM_MUSIC, soundVolume, 0);
-
-                if(gameTime == 0){
-                    dotsAndBoxes.changePlayer();
-                    dotsAndBoxes.changeTurn();
-                }
+    private Runnable mUpdateTimeTask = new Runnable() {
+        public void run() {
+            gameTime -= MS_ONE_SEC;
+            if(soundVolume<15){
+                soundVolume += 1;
             }
-        };
-        timer.scheduleAtFixedRate(tts,new Date(),1000);
+            mgr.setStreamVolume(AudioManager.STREAM_MUSIC, soundVolume, 0);
+            progress += 10;
+            progressBar.setProgress(progress);
+            Log.v(TAG, "VOLUME : " + soundVolume);
+            Log.v(TAG, "PROGRESS : " + progress);
+            Log.v(TAG, "GAMETIME : " + gameTime);
+            if(gameTime == 0){
+                progressBar.setProgress(progress);
+                changePlayer();
+                mp.stop();
+                mp = MediaPlayer.create(getBaseContext(), R.raw.clock);
+                mp.start();
+            }
+            mHandler.postDelayed(this, 1000);
+        }
+    };
 
+    private void initComp(){
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        playerTextView = (TextView) findViewById(R.id.playerTextView);
     }
 
+    private void changePlayer(){
+        dotsAndBoxes.changePlayer();
+
+        if(dotsAndBoxes.isPlayer()){
+            playerTextView.setText("Joueur A joue");
+        }else{
+            playerTextView.setText("Joueur B joue");
+        }
+
+        progress = 0;
+        gameTime = 10 * MS_ONE_SEC;
+        soundVolume = 4;
+
+
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -179,9 +213,9 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
             if(lineToPrint > 0) {
                 boolean redo = dotsAndBoxes.checkSquareComplete();
 
-                if(!redo)
+                if(!redo) {
                     dotsAndBoxes.changePlayer();
-
+                }
 
                 turnEnd();
                 Log.v(TAG, "" + isTouch + "--" + act.toString() + "--" + pointClick + "--" + lineToPrint);
