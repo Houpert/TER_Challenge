@@ -1,6 +1,7 @@
 package ter.android.ter_challenge;
 
 import android.content.Context;
+import android.graphics.PorterDuff;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -44,9 +45,7 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
     private SensorManager mSensorManager;
     private Sensor mSensor;
 
-    private ProgressBar progressBar;
-    private TextView playerTextView;
-
+    private boolean player = false;
     private DotsAndBoxes dotsAndBoxes;
     private boolean isTouch = false;
     private int pointClick = 0;
@@ -55,8 +54,8 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
     private long gameTime = 10 * MS_ONE_SEC;
     private int soundVolume= 4;
     private int progress= 0;
-
-    private SensorManager sm = null;
+    private ImageView[] bars = new ImageView[13];
+    //private SensorManager sm = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
