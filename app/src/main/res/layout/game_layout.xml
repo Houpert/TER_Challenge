@@ -9,20 +9,30 @@
     <GridLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
         android:id="@+id/gridLayout"
-        android:rowCount="14"
-        android:columnCount="5"
-        >
+        android:rowCount="16"
+        android:columnCount="7"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <Space
+            android:layout_columnSpan="7"
+            android:layout_marginBottom="5dp"
+            />
 
         <ProgressBar
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
             android:layout_height="69dp"
             android:id="@+id/progressBar"
-            android:layout_columnSpan="5"
+            android:layout_columnSpan="7"
             android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="20dp"
+            />
+
+        <Space
+            android:layout_rowSpan="5"
+            android:layout_marginLeft="30dp"
             />
 
         <ImageView
@@ -60,6 +70,10 @@
             android:layout_gravity="center"
             android:id="@+id/point3"
             android:src="@drawable/point" />
+
+        <Space
+            android:layout_rowSpan="5"
+            />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -168,7 +182,6 @@
             android:id="@+id/bar10"
             android:src="@drawable/bar_vertical" />
 
-
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -182,7 +195,6 @@
             android:layout_gravity="center"
             android:id="@+id/bar11"
             android:src="@drawable/bar_horizontal" />
-
 
         <ImageView
             android:layout_width="wrap_content"
@@ -211,7 +223,12 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="Joueur A joue"
-            android:layout_columnSpan="5"
+            android:layout_columnSpan="7"
+            android:layout_marginTop="10dp"
+            />
+
+        <Space
+            android:layout_columnSpan="7"
             />
 
 
