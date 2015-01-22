@@ -30,7 +30,10 @@ public class DotsAndBoxes {
         nbSquareCompleteJ1 = 0;
         nbSquareCompleteJ2 = 0;
         initLogic();
+    }
 
+    public boolean isPlayer() {
+        return player;
     }
 
     private void drawTrait(Action action, int nbPlateau){
