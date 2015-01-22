@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.GridLayout;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.util.Date;
@@ -28,7 +29,7 @@ import Domain.Action;
 
 public class GameActivity extends ActionBarActivity implements SensorEventListener {
 
-    private final int valueSensor = 2;
+    private final int valueSensor = 3;
 
     private final String TAG = "Debug -- ";
 
@@ -169,10 +170,13 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
             //TODO
             //dotsAndBoxes.
 
-           int lineToPrint = dotsAndBoxes.addTrait(act,pointClick);
-
-           Log.v(TAG, ""+isTouch+"--"+act.toString()+"--"+pointClick+"--"+lineToPrint);
-           turnEnd();
+            int lineToPrint = dotsAndBoxes.addTrait(act,pointClick);
+            if(lineToPrint > 0) {
+                Log.v(TAG, "" + isTouch + "--" + act.toString() + "--" + pointClick + "--" + lineToPrint);
+                turnEnd();
+            }else{
+                //Turn not end error user
+            }
         }
     }
 
@@ -207,7 +211,6 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
 
     public void touchButton(View view) {
         isTouch = true;
-        Log.v(TAG,"#################");
         switch (view.getId()) {
             case R.id.point1:
                 pointClick = 1;

@@ -16,7 +16,21 @@ public class DotsAndBoxes {
 
     Trait[][] plateau = new Trait[nbSquare][nbOddsSquare];
 
+    //player -> j1 / !player -> j2
     private boolean player = false;
+
+    private int nbSquareComplete = 0;
+    private int nbSquareCompleteJ1 = 0;
+    private int nbSquareCompleteJ2 = 0;
+
+
+    private void restGame(){
+        nbSquareComplete = 0;
+        nbSquareCompleteJ1 = 0;
+        nbSquareCompleteJ2 = 0;
+        initLogic();
+
+    }
 
     private void drawTrait(Action action, int nbPlateau){
         plateau[nbPlateau][action.ordinal()].setDraw(true);
@@ -61,11 +75,37 @@ public class DotsAndBoxes {
 
     }
 
-    public void detectCompleteSquare(int Square, Action action){
-        for(int i=0; i<3; i++){
+    public boolean gameEnd(){
+        if(nbSquareComplete == nbSquare)
+            return true;
+        else
+            return false;
+    }
 
+    public void checkSquareComplete(){
+        int nbLineFind, nbTotalSquare = 0;
+        for(int i=0; i<nbSquare; i++){
+            nbLineFind = 0;
+            for(int j=0; j<nbOddsSquare; j++){
+                if(plateau[i][j].isDraw())
+                    nbLineFind++;
+
+            }
+            if(nbLineFind == 4){
+                nbTotalSquare++;
+            }
+        }
+
+        if(nbSquareComplete != nbTotalSquare) {
+            if (player)
+                nbSquareCompleteJ1++;
+            else
+                nbSquareCompleteJ2++;
+            nbSquareComplete++;
         }
     }
+
+
 
     public int addTrait(Action action, int point){
         if(Action.EMPTY == action)
@@ -303,4 +343,5 @@ public class DotsAndBoxes {
 
         return -1;
     }
+
 }
