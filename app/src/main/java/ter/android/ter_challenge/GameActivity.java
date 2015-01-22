@@ -32,6 +32,8 @@ import Domain.Trait;
 
 public class GameActivity extends ActionBarActivity implements SensorEventListener {
 
+    private final int valueSensor = 2;
+
     private final String TAG = "Debug -- ";
     private int height;
     private int width;
@@ -47,6 +49,7 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
 
     private boolean player = false;
     private DotsAndBoxes dotsAndBoxes;
+    private boolean isTouch = false;
 
     private SensorManager sm = null;
 
@@ -75,10 +78,13 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
 
                 int touchX = (int) event.getX();
                 int touchY = (int) event.getY();
-
+                isTouch = true;
                 squareDetector(touchX, touchY);
+
                 return true;//always return true to consume event
             }
+
+
         });
         startTimer();
     }
@@ -108,6 +114,7 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
 
             }
         }
+
     }
 
     private void toastMessage(String msg) {
@@ -133,9 +140,6 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
                 AudioManager mgr = (AudioManager) getBaseContext().getSystemService(Context.AUDIO_SERVICE);
 
                 mgr.setStreamVolume(AudioManager.STREAM_MUSIC, soundVolume, 0);
-
-                Log.v(TAG, "Joueur : " + player);
-                Log.v(TAG, "Game time : " + gameTime/MS_ONE_SEC);
 
                 if(gameTime == 0){
                     dotsAndBoxes.changePlayer();
@@ -180,14 +184,27 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
     public final void onSensorChanged(SensorEvent event) {
         int sensor = event.sensor.getType();
         float [] values = event.values;
-        synchronized (this) {
-            if (sensor == Sensor.TYPE_MAGNETIC_FIELD) {
-                float magField_x = values[0];
-                float magField_y = values[1];
-                float magField_z = values[2];
-            }
-        }
+
+        float magField_x = values[0];
+        float magField_y= values[1];
+
+        Action act = detectAction(magField_x, magField_y);
     }
+
+    private Action detectAction(float x, float y) {
+        if(isTouch){
+            if(y < -valueSensor)
+                return Action.UP;
+            else if(y > valueSensor)
+                return Action.DOWN;
+            else if(x < -valueSensor)
+                return Action.RIGHT;
+            else if(x > valueSensor)
+                return Action.LEFT;
+        }
+        return Action.EMPTY;
+    }
+
 
     @Override
     protected void onResume() {
