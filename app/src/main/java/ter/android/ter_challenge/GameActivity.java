@@ -158,7 +158,7 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
     private void changePlayer(){
         dotsAndBoxes.changePlayer();
 
-        if(player){
+        if(dotsAndBoxes.isPlayer()){
             playerTextView.setText("Joueur A joue");
         }else{
             playerTextView.setText("Joueur B joue");
