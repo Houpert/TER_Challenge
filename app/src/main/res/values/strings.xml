@@ -3,7 +3,8 @@
 
     <string name="app_name">DotsAndBoxes</string>
     <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+    <string name="menu_exit">Exit</string>
+    <string name="menu_game">Home</string>
     <string name="title_activity_home">HomeActivity</string>
     <string name="title_activity_game">GameActivity</string>
     <string name="title_activity_main_ativity">MainAtivity</string>
