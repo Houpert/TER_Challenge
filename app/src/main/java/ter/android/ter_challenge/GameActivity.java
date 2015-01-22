@@ -43,7 +43,7 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
     private Handler mHandler ;
 
     private static int MS_ONE_SEC = 1000;
-    private long gameTime = 10 * MS_ONE_SEC;
+    private long gameTime = 15 * MS_ONE_SEC;
     private int soundVolume= 4;
 
     private GridLayout gameLayout;
@@ -228,9 +228,12 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
 
                 }
 
-                turnEnd();
-                if(dotsAndBoxes.gameEnd());
+                if(dotsAndBoxes.gameEnd()){
+                    String winner = dotsAndBoxes.whoWins();
+                    toastMessage("Joueur "+winner+" is the winner");
+                }
 
+                turnEnd();
 
             }else{
                 //Turn not end error user
