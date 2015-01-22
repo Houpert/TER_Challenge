@@ -1,6 +1,7 @@
 package ter.android.ter_challenge;
 
 import android.content.Context;
+import android.graphics.PorterDuff;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -15,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.GridLayout;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.util.Date;
@@ -46,12 +48,14 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
     private boolean isTouch = false;
     private int pointClick = 0;
 
+    private ImageView[] bars = new ImageView[13];
     //private SensorManager sm = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game_layout);
+
 
         DisplayMetrics displaymetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
@@ -62,6 +66,7 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
         initSensor();
         startTimer();
     }
+
 
     private void initSensor() {
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
