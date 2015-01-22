@@ -171,9 +171,9 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
 
     private void changePlayer(){
         if(dotsAndBoxes.isPlayer()){
-            playerTextView.setText("Joueur A joue");
+            playerTextView.setText("A player's turn");
         }else{
-            playerTextView.setText("Joueur B joue");
+            playerTextView.setText("B player's turn");
         }
     }
 
@@ -218,6 +218,29 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
         }
     }
 
+    private boolean isGameFinished() {
+        if (squaresWon[0] != 0 && squaresWon[1] != 0 && squaresWon[2] != 0 && squaresWon[3] != 0) {
+            return true;
+        }
+        return false;
+    }
+
+    private String  whoWon() {
+        int res = 0;
+
+        for (int i = 0; i < 4; i++) {
+            if (squaresWon[i] == 1)
+                res++;
+            if (squaresWon[i] == 2)
+                res++;
+        }
+        if (res < 0)
+            return "Player A Won the game !";
+        if (res > 0)
+            return "Player B Won the game !";
+        return "Draw game !";
+    }
+
     @Override
     public final void onSensorChanged(SensorEvent event) {
         int sensor = event.sensor.getType();
@@ -246,14 +269,14 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
 
                 }
 
-                if(dotsAndBoxes.gameEnd()){
-                    String winner = dotsAndBoxes.whoWins();
-                    toastMessage("Joueur "+winner+" is the winner");
+                if(isGameFinished()){
+                    String winner = whoWon();
+                    toastMessage(winner);
 
 
                     mp.stop();
                     Intent homeActivity = new Intent(this, HomeActivity.class);
-                    homeActivity.putExtra("winner","Joueur "+winner+" is the winner");
+                    homeActivity.putExtra("winner",winner);
                     startActivity(homeActivity);
 
 
