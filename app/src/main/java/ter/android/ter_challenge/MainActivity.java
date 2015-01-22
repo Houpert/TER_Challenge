@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.RelativeLayout;
 
 import Domain.Trait;
 
@@ -18,11 +21,30 @@ public class MainActivity extends ActionBarActivity {
 
     private final String TAG = "Debug -- ";
 
+    private RelativeLayout gameLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.game_layout);
         initLogic();
+
+        gameLayout = (RelativeLayout) findViewById(R.id.gameLayout);
+
+
+        gameLayout.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                //gesture detector to detect swipe.
+
+
+                int touchX = (int) event.getX();
+                int touchY = (int) event.getY();
+
+                squareDetector(touchX, touchY);
+                return true;//always return true to consume event
+            }
+        });
     }
 
     @Override
@@ -71,6 +93,11 @@ public class MainActivity extends ActionBarActivity {
         plateau[3][0]= tD;
         plateau[2][2]= tB;
         plateau[3][1]= tB;
+
+    }
+
+
+    private void squareDetector(int touchX, int touchY) {
 
     }
 
