@@ -30,7 +30,7 @@ import Domain.Action;
 
 public class GameActivity extends ActionBarActivity implements SensorEventListener {
 
-    private final int valueSensor = 2;
+    private final int valueSensor = 3;
 
     private final String TAG = "Debug -- ";
 
@@ -64,7 +64,7 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
         dotsAndBoxes.initLogic();
 
         initSensor();
-        startTimer();
+        //startTimer();
     }
 
 
@@ -174,9 +174,13 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
             //TODO
             //dotsAndBoxes.
 
-
-           Log.v(TAG, ""+isTouch+"--"+act.toString()+"--"+pointClick);
-           turnEnd();
+            int lineToPrint = dotsAndBoxes.addTrait(act,pointClick);
+            if(lineToPrint > 0) {
+                Log.v(TAG, "" + isTouch + "--" + act.toString() + "--" + pointClick + "--" + lineToPrint);
+                turnEnd();
+            }else{
+                //Turn not end error user
+            }
         }
     }
 
