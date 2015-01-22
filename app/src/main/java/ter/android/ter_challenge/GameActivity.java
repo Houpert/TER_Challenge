@@ -33,6 +33,7 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
 
     private final int nbOddsSquare = 4;
     private final int nbSquare = 4;
+    private final int valueSensor = 2;
 
     Trait[][] plateau = new Trait[nbSquare][nbOddsSquare];
 
@@ -50,6 +51,7 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
     private Sensor mSensor;
 
     private boolean player = false;
+    private boolean isTouch = false;
 
     private SensorManager sm = null;
 
@@ -74,13 +76,15 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
             public boolean onTouch(View v, MotionEvent event) {
                 //gesture detector to detect swipe.
 
-
                 int touchX = (int) event.getX();
                 int touchY = (int) event.getY();
-
+                isTouch = true;
                 squareDetector(touchX, touchY);
+
                 return true;//always return true to consume event
             }
+
+
         });
     }
 
@@ -219,14 +223,27 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
     public final void onSensorChanged(SensorEvent event) {
         int sensor = event.sensor.getType();
         float [] values = event.values;
-        synchronized (this) {
-            if (sensor == Sensor.TYPE_MAGNETIC_FIELD) {
-                float magField_x = values[0];
-                float magField_y = values[1];
-                float magField_z = values[2];
-            }
-        }
+
+        float magField_x = values[0];
+        float magField_y= values[1];
+
+        Action act = detectAction(magField_x, magField_y);
     }
+
+    private Action detectAction(float x, float y) {
+        if(isTouch){
+            if(y < -valueSensor)
+                return Action.UP;
+            else if(y > valueSensor)
+                return Action.DOWN;
+            else if(x < -valueSensor)
+                return Action.RIGHT;
+            else if(x > valueSensor)
+                return Action.LEFT;
+        }
+        return Action.EMPTY;
+    }
+
 
     @Override
     protected void onResume() {
