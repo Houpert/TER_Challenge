@@ -49,6 +49,7 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
     private SensorManager mSensorManager;
     private Sensor mSensor;
 
+    private boolean player = false;
 
     private SensorManager sm = null;
 
