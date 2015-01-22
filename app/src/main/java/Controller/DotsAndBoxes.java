@@ -7,17 +7,13 @@ import Domain.Trait;
 
 public class DotsAndBoxes {
 
-    private final int MS_ONE_SEC = 1000;
-    private long gameTime = 10 * MS_ONE_SEC;
-    private int soundVolume= 4;
-
     private final int nbOddsSquare = 4;
     private final int nbSquare = 4;
 
     Trait[][] plateau = new Trait[nbSquare][nbOddsSquare];
 
     //player -> j1 / !player -> j2
-    private boolean player = false;
+    private boolean player = true;
 
     private int nbSquareComplete = 0;
     private int nbSquareCompleteJ1 = 0;
@@ -36,17 +32,13 @@ public class DotsAndBoxes {
         plateau[nbPlateau][action.ordinal()].setDraw(true);
     }
 
-    public void changeTurn(){
-        gameTime = 10 * MS_ONE_SEC;
-        soundVolume = 4;
-    }
-
-    public void changePlayer(){
+    public boolean changePlayer(){
         if(player){
             player = false;
         }else{
             player = true;
         }
+        return player;
     }
 
     public void initLogic() {

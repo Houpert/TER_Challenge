@@ -8,6 +8,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -16,7 +17,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.GridLayout;
-import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Date;
@@ -34,10 +36,10 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
 
     private final String TAG = "Debug -- ";
 
-    private static int MS_ONE_SEC = 1000;
-    private long gameTime = 10 * MS_ONE_SEC;
-    private int soundVolume= 4;
     private MediaPlayer mp;
+    private AudioManager mgr;
+
+    private Handler mHandler ;
 
     private GridLayout gameLayout;
     private SensorManager mSensorManager;
@@ -48,6 +50,10 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
     private boolean isTouch = false;
     private int pointClick = 0;
 
+    private final int MS_ONE_SEC = 1000;
+    private long gameTime = 10 * MS_ONE_SEC;
+    private int soundVolume= 4;
+    private int progress= 0;
     private ImageView[] bars = new ImageView[13];
     //private SensorManager sm = null;
 
@@ -56,7 +62,6 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game_layout);
 
-
         DisplayMetrics displaymetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
 
@@ -64,9 +69,18 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
         dotsAndBoxes.initLogic();
 
         initSensor();
-        //startTimer();
-    }
 
+        initComp();
+
+
+        mHandler = new Handler();
+        mHandler.postDelayed(mUpdateTimeTask, 1000);
+
+        mp = MediaPlayer.create(getBaseContext(), R.raw.clock);
+        mgr = (AudioManager) getBaseContext().getSystemService(Context.AUDIO_SERVICE);
+        mgr.setStreamVolume(AudioManager.STREAM_MUSIC, soundVolume, 0);
+        mp.start();
+    }
 
     private void initSensor() {
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
@@ -96,43 +110,60 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
 
     }
 
-    private void turnEnd(){
+    private void turnEnd() {
         pointClick = 0;
         isTouch = false;
+    }
+
+    public void changeTurn() {
+        progress = 0;
+        gameTime = 10 * MS_ONE_SEC;
+        soundVolume = 4;
     }
 
     private void toastMessage(String msg) {
         Toast toast = Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT);
         toast.show();
     }
-
-    private void startTimer(){
-        mp = MediaPlayer.create(getBaseContext(), R.raw.clock);
-        mp.setVolume(soundVolume, soundVolume);
-        mp.start();
-
-        Timer timer = new Timer();
-        TimerTask tts = new TimerTask() {
-            @Override
-            public void run() {
-                gameTime -= MS_ONE_SEC;
-                if(soundVolume<15){
-                    soundVolume += 1;
-                }
-                mp.setVolume(soundVolume,soundVolume);
-
-                AudioManager mgr = (AudioManager) getBaseContext().getSystemService(Context.AUDIO_SERVICE);
-
-                mgr.setStreamVolume(AudioManager.STREAM_MUSIC, soundVolume, 0);
-
-                if(gameTime == 0){
-                    dotsAndBoxes.changePlayer();
-                    dotsAndBoxes.changeTurn();
-                }
+    private Runnable mUpdateTimeTask = new Runnable() {
+        public void run() {
+            gameTime -= MS_ONE_SEC;
+            if(soundVolume<15){
+                soundVolume += 1;
             }
-        };
-        timer.scheduleAtFixedRate(tts,new Date(),1000);
 
+            mgr.setStreamVolume(AudioManager.STREAM_MUSIC, soundVolume, 0);
+
+            progress += 10;
+            progressBar.setProgress(progress);
+            Log.v(TAG, "VOLUME : " + soundVolume);
+            Log.v(TAG, "PROGRESS : " + progress);
+            Log.v(TAG, "GAMETIME : " + gameTime);
+
+            if(gameTime == 0){
+                progressBar.setProgress(progress);
+                changeTurn();
+                changePlayer(dotsAndBoxes.changePlayer());
+                mp.stop();
+                mp = MediaPlayer.create(getBaseContext(), R.raw.clock);
+                mp.start();
+
+            }
+            mHandler.postDelayed(this, 1000);
+        }
+    };
+
+    private void initComp(){
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        playerTextView = (TextView) findViewById(R.id.playerTextView);
+    }
+
+    private void changePlayer(boolean player){
+        if(player){
+            playerTextView.setText("Joueur A joue");
+        }else{
+            playerTextView.setText("Joueur B joue");
+        }
     }
 
     @Override
