@@ -1,16 +1,21 @@
 package ter.android.ter_challenge;
 
 import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.RelativeLayout;
+import android.widget.GridLayout;
 
 import java.util.Date;
 import java.util.Timer;
@@ -19,7 +24,7 @@ import java.util.TimerTask;
 import Domain.Trait;
 
 
-public class GameActivity extends ActionBarActivity {
+public class GameActivity extends ActionBarActivity implements SensorEventListener {
 
     private final int nbOddsSquare = 4;
     private final int nbSquare = 4;
@@ -35,7 +40,9 @@ public class GameActivity extends ActionBarActivity {
     private int soundVolume= 4;
     private MediaPlayer mp;
 
-    private RelativeLayout gameLayout;
+    private GridLayout gameLayout;
+    private SensorManager mSensorManager;
+    private Sensor mSensor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +56,7 @@ public class GameActivity extends ActionBarActivity {
 
         initLogic();
 
-        gameLayout = (RelativeLayout) findViewById(R.id.gameLayout);
+        gameLayout = (GridLayout) findViewById(R.id.gameLayout);
 
 
         gameLayout.setOnTouchListener(new View.OnTouchListener() {
@@ -66,11 +73,13 @@ public class GameActivity extends ActionBarActivity {
             }
         });
 
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
     }
 
     private void startTimer(){
         mp = MediaPlayer.create(getBaseContext(), R.raw.clock);
-        mp.setVolume(soundVolume,soundVolume);
+        mp.setVolume(soundVolume, soundVolume);
         mp.start();
 
         Timer timer = new Timer();
@@ -150,9 +159,16 @@ public class GameActivity extends ActionBarActivity {
 
 
     private void squareDetector(int touchX, int touchY) {
-
-
-
     }
 
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        Log.v(TAG, event.toString());
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
 }
