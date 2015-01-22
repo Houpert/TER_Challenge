@@ -6,4 +6,15 @@
     android:focusableInTouchMode="true"
     android:id="@+id/gameLayout">
 
+    <GridLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+
+    </GridLayout>
+
+
 </RelativeLayout>
