@@ -230,7 +230,7 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
 
         for (int i = 0; i < 4; i++) {
             if (squaresWon[i] == 1)
-                res++;
+                res--;
             if (squaresWon[i] == 2)
                 res++;
         }
@@ -275,6 +275,7 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
 
 
                     mp.stop();
+                    mp = null;
                     Intent homeActivity = new Intent(this, HomeActivity.class);
                     homeActivity.putExtra("winner",winner);
                     startActivity(homeActivity);
