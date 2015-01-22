@@ -28,7 +28,7 @@
             />
         <Space
             android:layout_rowSpan="5"
-            android:layout_marginLeft="30dp"
+            android:layout_marginLeft="5dp"
             />
         <ImageView
             android:layout_width="wrap_content"
