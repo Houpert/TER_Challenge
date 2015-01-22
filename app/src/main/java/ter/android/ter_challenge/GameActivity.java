@@ -25,16 +25,12 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import Controller.DotsAndBoxes;
 import Domain.Action;
 import Domain.Trait;
 
 
 public class GameActivity extends ActionBarActivity implements SensorEventListener {
-
-    private final int nbOddsSquare = 4;
-    private final int nbSquare = 4;
-
-    Trait[][] plateau = new Trait[nbSquare][nbOddsSquare];
 
     private final String TAG = "Debug -- ";
     private int height;
@@ -50,6 +46,7 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
     private Sensor mSensor;
 
     private boolean player = false;
+    private DotsAndBoxes dotsAndBoxes;
 
     private SensorManager sm = null;
 
@@ -63,7 +60,8 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
         height = displaymetrics.heightPixels;
         width = displaymetrics.widthPixels;
 
-        initLogic();
+        dotsAndBoxes = new DotsAndBoxes();
+        dotsAndBoxes.initLogic();
         initSensor();
 
 
@@ -82,6 +80,7 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
                 return true;//always return true to consume event
             }
         });
+        startTimer();
     }
 
     private void initSensor() {
@@ -109,7 +108,6 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
 
             }
         }
-
     }
 
     private void toastMessage(String msg) {
@@ -136,16 +134,12 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
 
                 mgr.setStreamVolume(AudioManager.STREAM_MUSIC, soundVolume, 0);
 
-                System.out.println(gameTime/MS_ONE_SEC);
+                Log.v(TAG, "Joueur : " + player);
+                Log.v(TAG, "Game time : " + gameTime/MS_ONE_SEC);
 
-                if(gameTime==0){
-                    gameTime = 10 * MS_ONE_SEC;
-                    soundVolume = 4;
-                    if(player){
-                        player = false;
-                    }else {
-                        player = true;
-                    }
+                if(gameTime == 0){
+                    dotsAndBoxes.changePlayer();
+                    dotsAndBoxes.changeTurn();
                 }
             }
         };
@@ -175,41 +169,8 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
         return super.onOptionsItemSelected(item);
     }
 
-
-    private void initLogic() {
-        plateau[0][0]=new Trait(false);
-        plateau[0][1]=new Trait(false);
-        plateau[1][0]=new Trait(false);
-        plateau[1][2]=new Trait(false);
-        plateau[2][1]=new Trait(false);
-        plateau[2][3]=new Trait(false);
-        plateau[3][2]=new Trait(false);
-        plateau[3][3]=new Trait(false);
-
-        Trait  tH = new Trait(false);
-        Trait  tB = new Trait(false);
-        Trait  tD = new Trait(false);
-        Trait  tG = new Trait(false);
-
-        plateau[0][2]= tH;
-        plateau[1][1]= tH;
-        plateau[0][3]= tG;
-        plateau[2][0]= tG;
-        plateau[1][3]= tD;
-        plateau[3][0]= tD;
-        plateau[2][2]= tB;
-        plateau[3][1]= tB;
-
-    }
-
-    private void drawTrait(Action action, int nbPlateau){
-        plateau[nbPlateau][action.ordinal()].setDraw(true);
-    }
-
-
     private void squareDetector(int touchX, int touchY) {
     }
-
 
     @Override
     public final void onAccuracyChanged(Sensor sensor, int accuracy) {
