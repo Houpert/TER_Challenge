@@ -17,7 +17,7 @@ public class DotsAndBoxes {
     Trait[][] plateau = new Trait[nbSquare][nbOddsSquare];
 
     //player -> j1 / !player -> j2
-    private boolean player = false;
+    private boolean player = true;
 
     private int nbSquareComplete = 0;
     private int nbSquareCompleteJ1 = 0;
@@ -25,6 +25,7 @@ public class DotsAndBoxes {
 
 
     private void restGame(){
+        player = true;
         nbSquareComplete = 0;
         nbSquareCompleteJ1 = 0;
         nbSquareCompleteJ2 = 0;
@@ -42,11 +43,7 @@ public class DotsAndBoxes {
     }
 
     public void changePlayer(){
-        if(player){
-            player = false;
-        }else{
-            player = true;
-        }
+        player = !player;
     }
 
     public void initLogic() {
@@ -82,7 +79,7 @@ public class DotsAndBoxes {
             return false;
     }
 
-    public void checkSquareComplete(){
+    public boolean checkSquareComplete(){
         int nbLineFind, nbTotalSquare = 0;
         for(int i=0; i<nbSquare; i++){
             nbLineFind = 0;
@@ -97,12 +94,16 @@ public class DotsAndBoxes {
         }
 
         if(nbSquareComplete != nbTotalSquare) {
+            nbSquareComplete++;
             if (player)
                 nbSquareCompleteJ1++;
             else
                 nbSquareCompleteJ2++;
-            nbSquareComplete++;
+
+            return true;
         }
+
+        return false;
     }
 
 

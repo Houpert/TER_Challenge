@@ -7,6 +7,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.AudioManager;
+import android.media.Image;
 import android.media.MediaPlayer;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -176,8 +177,19 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
 
             int lineToPrint = dotsAndBoxes.addTrait(act,pointClick);
             if(lineToPrint > 0) {
-                Log.v(TAG, "" + isTouch + "--" + act.toString() + "--" + pointClick + "--" + lineToPrint);
+                boolean redo = dotsAndBoxes.checkSquareComplete();
+
+                if(!redo)
+                    dotsAndBoxes.changePlayer();
+
+
                 turnEnd();
+                Log.v(TAG, "" + isTouch + "--" + act.toString() + "--" + pointClick + "--" + lineToPrint);
+
+                //TODO game end
+                if(dotsAndBoxes.gameEnd());
+
+
             }else{
                 //Turn not end error user
             }
