@@ -7,6 +7,11 @@ public class Trait {
 
     boolean isDraw;
 
+
+    public Trait(boolean isDraw) {
+        this.isDraw = isDraw;
+    }
+
     @Override
     public String toString() {
         return "Trait{" +

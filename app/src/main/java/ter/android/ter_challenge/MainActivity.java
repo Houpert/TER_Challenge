@@ -2,18 +2,28 @@ package ter.android.ter_challenge;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import Domain.Trait;
+
 
 public class MainActivity extends ActionBarActivity {
+
+    private final int nbOddsSquare = 4;
+    private final int nbSquare = 4;
+
+    Trait[][] plateau = new Trait[nbSquare][nbOddsSquare];
+
+    private final String TAG = "Debug -- ";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        initLogic();
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -36,4 +46,32 @@ public class MainActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+
+    private void initLogic() {
+        plateau[0][0]=new Trait(false);
+        plateau[0][1]=new Trait(false);
+        plateau[1][0]=new Trait(false);
+        plateau[1][2]=new Trait(false);
+        plateau[2][1]=new Trait(false);
+        plateau[2][3]=new Trait(false);
+        plateau[3][2]=new Trait(false);
+        plateau[3][3]=new Trait(false);
+
+        Trait  tH = new Trait(false);
+        Trait  tB = new Trait(false);
+        Trait  tD = new Trait(false);
+        Trait  tG = new Trait(false);
+
+        plateau[0][2]= tH;
+        plateau[1][1]= tH;
+        plateau[0][3]= tG;
+        plateau[2][0]= tG;
+        plateau[1][3]= tD;
+        plateau[3][0]= tD;
+        plateau[2][2]= tB;
+        plateau[3][1]= tB;
+
+    }
+
 }
