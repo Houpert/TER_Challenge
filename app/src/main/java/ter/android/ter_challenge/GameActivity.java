@@ -56,7 +56,7 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
 
         initLogic();
 
-        gameLayout = (GridLayout) findViewById(R.id.gameLayout);
+        gameLayout = (GridLayout) findViewById(R.id.gridLayout);
 
 
         gameLayout.setOnTouchListener(new View.OnTouchListener() {
