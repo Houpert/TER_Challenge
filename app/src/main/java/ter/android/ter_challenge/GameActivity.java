@@ -21,6 +21,7 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import Domain.Action;
 import Domain.Trait;
 
 
@@ -34,6 +35,8 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
     private final String TAG = "Debug -- ";
     private int height;
     private int width;
+
+    private boolean player = true;
 
     private static int MS_ONE_SEC = 1000;
     private long gameTime = 10 * MS_ONE_SEC;
@@ -101,6 +104,11 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
                 if(gameTime==0){
                     gameTime = 10 * MS_ONE_SEC;
                     soundVolume = 4;
+                    if(player){
+                        player = false;
+                    }else {
+                        player = true;
+                    }
                 }
             }
         };
@@ -155,6 +163,10 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
         plateau[2][2]= tB;
         plateau[3][1]= tB;
 
+    }
+
+    private void drawTrait(Action action, int nbPlateau){
+        plateau[nbPlateau][action.ordinal()].setDraw(true);
     }
 
 
