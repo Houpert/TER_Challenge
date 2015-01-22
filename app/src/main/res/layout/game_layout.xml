@@ -22,15 +22,15 @@
             android:layout_height="69dp"
             android:id="@+id/progressBar"
             android:layout_columnSpan="5"
-            android:layout_gravity="center_horizontal"
-            />
+            android:layout_gravity="center_horizontal"/>
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:id="@+id/point1"
-            android:src="@drawable/point" />
+            android:src="@drawable/point"
+            android:onClick="touchButton" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -45,7 +45,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:id="@+id/point2"
-            android:src="@drawable/point" />
+            android:src="@drawable/point"
+            android:onClick="touchButton" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -59,7 +60,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:id="@+id/point3"
-            android:src="@drawable/point" />
+            android:src="@drawable/point"
+            android:onClick="touchButton" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -102,7 +104,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:id="@+id/point4"
-            android:src="@drawable/point" />
+            android:src="@drawable/point"
+            android:onClick="touchButton" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -117,7 +120,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:id="@+id/point5"
-            android:src="@drawable/point" />
+            android:src="@drawable/point"
+            android:onClick="touchButton" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -131,7 +135,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:id="@+id/point6"
-            android:src="@drawable/point" />
+            android:src="@drawable/point"
+            android:onClick="touchButton" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -174,7 +179,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:id="@+id/point7"
-            android:src="@drawable/point" />
+            android:src="@drawable/point"
+            android:onClick="touchButton" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -189,7 +195,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:id="@+id/point8"
-            android:src="@drawable/point" />
+            android:src="@drawable/point"
+            android:onClick="touchButton" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -204,7 +211,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:id="@+id/point9"
-            android:src="@drawable/point" />
+            android:src="@drawable/point"
+            android:onClick="touchButton" />
 
         <TextView
             android:layout_width="wrap_content"

@@ -1,21 +1,18 @@
 package ter.android.ter_challenge;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.nfc.Tag;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.GridLayout;
 import android.widget.Toast;
@@ -27,7 +24,6 @@ import java.util.TimerTask;
 
 import Controller.DotsAndBoxes;
 import Domain.Action;
-import Domain.Trait;
 
 
 public class GameActivity extends ActionBarActivity implements SensorEventListener {
@@ -35,8 +31,6 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
     private final int valueSensor = 2;
 
     private final String TAG = "Debug -- ";
-    private int height;
-    private int width;
 
     private static int MS_ONE_SEC = 1000;
     private long gameTime = 10 * MS_ONE_SEC;
@@ -50,8 +44,9 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
     private boolean player = false;
     private DotsAndBoxes dotsAndBoxes;
     private boolean isTouch = false;
+    private int pointClick = 0;
 
-    private SensorManager sm = null;
+    //private SensorManager sm = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,32 +55,11 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
 
         DisplayMetrics displaymetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-        height = displaymetrics.heightPixels;
-        width = displaymetrics.widthPixels;
 
         dotsAndBoxes = new DotsAndBoxes();
         dotsAndBoxes.initLogic();
+
         initSensor();
-
-
-
-        gameLayout = (GridLayout) findViewById(R.id.gridLayout);
-        gameLayout.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                //gesture detector to detect swipe.
-
-
-                int touchX = (int) event.getX();
-                int touchY = (int) event.getY();
-                isTouch = true;
-                squareDetector(touchX, touchY);
-
-                return true;//always return true to consume event
-            }
-
-
-        });
         startTimer();
     }
 
@@ -115,6 +89,11 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
             }
         }
 
+    }
+
+    private void turnEnd(){
+        pointClick = 0;
+        isTouch = false;
     }
 
     private void toastMessage(String msg) {
@@ -173,9 +152,6 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
         return super.onOptionsItemSelected(item);
     }
 
-    private void squareDetector(int touchX, int touchY) {
-    }
-
     @Override
     public final void onAccuracyChanged(Sensor sensor, int accuracy) {
     }
@@ -189,6 +165,14 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
         float magField_y= values[1];
 
         Action act = detectAction(magField_x, magField_y);
+        if(isTouch && act != Action.EMPTY){
+            //TODO
+            //dotsAndBoxes.
+
+
+           Log.v(TAG, ""+isTouch+"--"+act.toString()+"--"+pointClick);
+           turnEnd();
+        }
     }
 
     private Action detectAction(float x, float y) {
@@ -220,7 +204,36 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
     }
 
 
-
-
-
+    public void touchButton(View view) {
+        isTouch = true;
+        switch (view.getId()) {
+            case R.id.point1:
+                pointClick = 1;
+                break;
+            case R.id.point2:
+                pointClick = 2;
+                break;
+            case R.id.point3:
+                pointClick = 3;
+                break;
+            case R.id.point4:
+                pointClick = 4;
+                break;
+            case R.id.point5:
+                pointClick = 5;
+                break;
+            case R.id.point6:
+                pointClick = 6;
+                break;
+            case R.id.point7:
+                pointClick = 7;
+                break;
+            case R.id.point8:
+                pointClick = 8;
+                break;
+            case R.id.point9:
+                pointClick = 9;
+                break;
+        }
+    }
 }
