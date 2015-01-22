@@ -1,12 +1,14 @@
 package ter.android.ter_challenge;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.nfc.Tag;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -16,20 +18,21 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.GridLayout;
+import android.widget.Toast;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import Controller.DotsAndBoxes;
+import Domain.Action;
 import Domain.Trait;
 
 
 public class GameActivity extends ActionBarActivity implements SensorEventListener {
 
-    private final int nbOddsSquare = 4;
-    private final int nbSquare = 4;
-
-    Trait[][] plateau = new Trait[nbSquare][nbOddsSquare];
+    private final int valueSensor = 2;
 
     private final String TAG = "Debug -- ";
     private int height;
@@ -44,6 +47,12 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
     private SensorManager mSensorManager;
     private Sensor mSensor;
 
+    private boolean player = false;
+    private DotsAndBoxes dotsAndBoxes;
+    private boolean isTouch = false;
+
+    private SensorManager sm = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,11 +63,13 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
         height = displaymetrics.heightPixels;
         width = displaymetrics.widthPixels;
 
-        initLogic();
+        dotsAndBoxes = new DotsAndBoxes();
+        dotsAndBoxes.initLogic();
+        initSensor();
+
+
 
         gameLayout = (GridLayout) findViewById(R.id.gridLayout);
-
-
         gameLayout.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -67,14 +78,48 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
 
                 int touchX = (int) event.getX();
                 int touchY = (int) event.getY();
-
+                isTouch = true;
                 squareDetector(touchX, touchY);
+
                 return true;//always return true to consume event
             }
-        });
 
+
+        });
+        startTimer();
+    }
+
+    private void initSensor() {
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
+
+        if (mSensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY) != null){
+            List<Sensor> gravSensors = mSensorManager.getSensorList(Sensor.TYPE_GRAVITY);
+            for(int i=0; i<gravSensors.size(); i++) {
+                if ((gravSensors.get(i).getVendor().contains("Google Inc.")) &&
+                        (gravSensors.get(i).getVersion() == 3)){
+                    // Use the version 3 gravity sensor.
+                    mSensor = gravSensors.get(i);
+                }
+            }
+        }
+        else{
+            // Use the accelerometer.
+            if (mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null){
+                mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+            }
+            else{
+                // Sorry, there are no accelerometers on your device.
+                // You can't play this game.
+                toastMessage(" You can't play this game, no Sensor");
+
+            }
+        }
+
+    }
+
+    private void toastMessage(String msg) {
+        Toast toast = Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT);
+        toast.show();
     }
 
     private void startTimer(){
@@ -96,11 +141,9 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
 
                 mgr.setStreamVolume(AudioManager.STREAM_MUSIC, soundVolume, 0);
 
-                System.out.println(gameTime/MS_ONE_SEC);
-
-                if(gameTime==0){
-                    gameTime = 10 * MS_ONE_SEC;
-                    soundVolume = 4;
+                if(gameTime == 0){
+                    dotsAndBoxes.changePlayer();
+                    dotsAndBoxes.changeTurn();
                 }
             }
         };
@@ -130,45 +173,54 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
         return super.onOptionsItemSelected(item);
     }
 
-
-    private void initLogic() {
-        plateau[0][0]=new Trait(false);
-        plateau[0][1]=new Trait(false);
-        plateau[1][0]=new Trait(false);
-        plateau[1][2]=new Trait(false);
-        plateau[2][1]=new Trait(false);
-        plateau[2][3]=new Trait(false);
-        plateau[3][2]=new Trait(false);
-        plateau[3][3]=new Trait(false);
-
-        Trait  tH = new Trait(false);
-        Trait  tB = new Trait(false);
-        Trait  tD = new Trait(false);
-        Trait  tG = new Trait(false);
-
-        plateau[0][2]= tH;
-        plateau[1][1]= tH;
-        plateau[0][3]= tG;
-        plateau[2][0]= tG;
-        plateau[1][3]= tD;
-        plateau[3][0]= tD;
-        plateau[2][2]= tB;
-        plateau[3][1]= tB;
-
-    }
-
-
     private void squareDetector(int touchX, int touchY) {
     }
 
-
     @Override
-    public void onSensorChanged(SensorEvent event) {
-        Log.v(TAG, event.toString());
+    public final void onAccuracyChanged(Sensor sensor, int accuracy) {
     }
 
     @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+    public final void onSensorChanged(SensorEvent event) {
+        int sensor = event.sensor.getType();
+        float [] values = event.values;
+
+        float magField_x = values[0];
+        float magField_y= values[1];
+
+        Action act = detectAction(magField_x, magField_y);
+    }
+
+    private Action detectAction(float x, float y) {
+        if(isTouch){
+            if(y < -valueSensor)
+                return Action.UP;
+            else if(y > valueSensor)
+                return Action.DOWN;
+            else if(x < -valueSensor)
+                return Action.RIGHT;
+            else if(x > valueSensor)
+                return Action.LEFT;
+        }
+        return Action.EMPTY;
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mSensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
 
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mSensorManager.unregisterListener(this);
+    }
+
+
+
+
+
 }
