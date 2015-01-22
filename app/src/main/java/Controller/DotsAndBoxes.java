@@ -67,240 +67,240 @@ public class DotsAndBoxes {
         }
     }
 
-    public boolean addTrait(Action action, int point){
+    public int addTrait(Action action, int point){
         if(Action.EMPTY == action)
-            return false;
+            return -1;
 
         switch (point) {
             case 1:
                 if (action == Action.UP || action == Action.LEFT)
-                    return false;
+                    return -1;
                 if (action == Action.DOWN) {
                     if (plateau[0][1].isDraw())
-                        return false;
+                        return -1;
                     else {
                         plateau[0][1].setDraw(true);
-                        return true;
+                        return 3;
                     }
                 }
                 if (action == Action.RIGHT){
                     if (plateau[0][0].isDraw())
-                        return false;
+                        return -1;
                     else {
                         plateau[0][0].setDraw(true);
-                        return true;
+                        return 1;
                     }
                 }
                 break;
             case 2:
                 if(action == Action.UP)
-                    return false;
+                    return -1;
                 if(action == Action.LEFT){
                     if (plateau[0][0].isDraw())
-                        return false;
+                        return -1;
                     else {
                         plateau[0][0].setDraw(true);
-                        return true;
+                        return 1;
                     }
                 }
                 if(action == Action.RIGHT){
                     if (plateau[1][0].isDraw())
-                        return false;
+                        return -1;
                     else {
                         plateau[1][0].setDraw(true);
-                        return true;
+                        return 2;
                     }
                 }
                 if(action == Action.DOWN){
                     if (plateau[0][2].isDraw())
-                        return false;
+                        return -1;
                     else {
                         plateau[0][2].setDraw(true);
-                        return true;
+                        return 4;
                     }
                 }
                 break;
             case 3:
                 if (action == Action.UP || action == Action.RIGHT)
-                    return false;
+                    return -1;
                 if (action == Action.DOWN) {
                     if (plateau[1][2].isDraw())
-                        return false;
+                        return -1;
                     else {
                         plateau[1][2].setDraw(true);
-                        return true;
+                        return 5;
                     }
                 }
                 if (action == Action.LEFT){
                     if (plateau[1][0].isDraw())
-                        return false;
+                        return -1;
                     else {
                         plateau[1][0].setDraw(true);
-                        return true;
+                        return 2;
                     }
                 }
                 break;
             case 4:
                 if(action == Action.LEFT)
-                    return false;
+                    return -1;
                 if(action == Action.UP){
                     if (plateau[0][1].isDraw())
-                        return false;
+                        return -1;
                     else {
                         plateau[0][1].setDraw(true);
-                        return true;
+                        return 3;
                     }
                 }
                 if(action == Action.RIGHT){
-                    if (plateau[1][3].isDraw())
-                        return false;
+                    if (plateau[0][3].isDraw())
+                        return -1;
                     else {
-                        plateau[1][3].setDraw(true);
-                        return true;
+                        plateau[0][3].setDraw(true);
+                        return 6;
                     }
                 }
                 if(action == Action.DOWN){
                     if (plateau[2][1].isDraw())
-                        return false;
+                        return -1;
                     else {
                         plateau[2][1].setDraw(true);
-                        return true;
+                        return 8;
                     }
                 }
                 break;
             case 5:
                 if(action == Action.LEFT)
                     if (plateau[0][3].isDraw())
-                        return false;
+                        return -1;
                     else {
                         plateau[0][3].setDraw(true);
-                        return true;
+                        return 6;
                     }
                 if(action == Action.UP){
                     if (plateau[0][2].isDraw())
-                        return false;
+                        return -1;
                     else {
                         plateau[0][2].setDraw(true);
-                        return true;
+                        return 4;
                     }
                 }
                 if(action == Action.RIGHT){
                     if (plateau[1][3].isDraw())
-                        return false;
+                        return -1;
                     else {
                         plateau[1][3].setDraw(true);
-                        return true;
+                        return 7;
                     }
                 }
                 if(action == Action.DOWN){
                     if (plateau[2][2].isDraw())
-                        return false;
+                        return -1;
                     else {
                         plateau[2][2].setDraw(true);
-                        return true;
+                        return 9;
                     }
                 }
                 break;
             case 6:
                 if(action == Action.RIGHT)
-                    return false;
+                    return -1;
                 if(action == Action.UP){
                     if (plateau[1][2].isDraw())
-                        return false;
+                        return -1;
                     else {
                         plateau[1][2].setDraw(true);
-                        return true;
+                        return 5;
                     }
                 }
                 if(action == Action.LEFT){
                     if (plateau[1][3].isDraw())
-                        return false;
+                        return -1;
                     else {
                         plateau[1][3].setDraw(true);
-                        return true;
+                        return 7;
                     }
                 }
                 if(action == Action.DOWN){
                     if (plateau[3][2].isDraw())
-                        return false;
+                        return -1;
                     else {
                         plateau[3][2].setDraw(true);
-                        return true;
+                        return 10;
                     }
                 }
                 break;
             case 7:
                 if (action == Action.DOWN || action == Action.LEFT)
-                    return false;
+                    return -1;
                 if (action == Action.UP) {
                     if (plateau[2][1].isDraw())
-                        return false;
+                        return -1;
                     else {
                         plateau[2][1].setDraw(true);
-                        return true;
+                        return 8;
                     }
                 }
                 if (action == Action.RIGHT){
                     if (plateau[2][3].isDraw())
-                        return false;
+                        return -1;
                     else {
                         plateau[2][3].setDraw(true);
-                        return true;
+                        return 11;
                     }
                 }
                 break;
             case 8:
                 if(action == Action.DOWN)
-                    return false;
+                    return -1;
                 if(action == Action.UP){
                     if (plateau[2][2].isDraw())
-                        return false;
+                        return -1;
                     else {
                         plateau[2][2].setDraw(true);
-                        return true;
+                        return 9;
                     }
                 }
                 if(action == Action.LEFT){
                     if (plateau[2][3].isDraw())
-                        return false;
+                        return -1;
                     else {
                         plateau[2][3].setDraw(true);
-                        return true;
+                        return 11;
                     }
                 }
                 if(action == Action.RIGHT){
                     if (plateau[3][3].isDraw())
-                        return false;
+                        return -1;
                     else {
                         plateau[3][3].setDraw(true);
-                        return true;
+                        return 12;
                     }
                 }
                 break;
             case 9:
                 if (action == Action.DOWN || action == Action.RIGHT)
-                    return false;
+                    return -1;
                 if (action == Action.UP) {
                     if (plateau[3][2].isDraw())
-                        return false;
+                        return -1;
                     else {
-                        plateau[2][2].setDraw(true);
-                        return true;
+                        plateau[3][2].setDraw(true);
+                        return 10;
                     }
                 }
                 if (action == Action.LEFT){
                     if (plateau[3][3].isDraw())
-                        return false;
+                        return -1;
                     else {
                         plateau[3][3].setDraw(true);
-                        return true;
+                        return 12;
                     }
                 }
                 break;
             default:
-                return false;
+                return -1;
         }
 
-        return false;
+        return -1;
     }
 }

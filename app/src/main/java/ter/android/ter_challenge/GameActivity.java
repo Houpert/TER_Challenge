@@ -60,7 +60,7 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
         dotsAndBoxes.initLogic();
 
         initSensor();
-        startTimer();
+        //startTimer();
     }
 
     private void initSensor() {
@@ -169,8 +169,9 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
             //TODO
             //dotsAndBoxes.
 
+           int lineToPrint = dotsAndBoxes.addTrait(act,pointClick);
 
-           Log.v(TAG, ""+isTouch+"--"+act.toString()+"--"+pointClick);
+           Log.v(TAG, ""+isTouch+"--"+act.toString()+"--"+pointClick+"--"+lineToPrint);
            turnEnd();
         }
     }
@@ -206,6 +207,7 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
 
     public void touchButton(View view) {
         isTouch = true;
+        Log.v(TAG,"#################");
         switch (view.getId()) {
             case R.id.point1:
                 pointClick = 1;
