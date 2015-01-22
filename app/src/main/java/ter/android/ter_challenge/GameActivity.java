@@ -43,7 +43,7 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
     private Handler mHandler ;
 
     private static int MS_ONE_SEC = 1000;
-    private long gameTime = 10 * MS_ONE_SEC;
+    private long gameTime = 15 * MS_ONE_SEC;
     private int soundVolume= 4;
 
     private GridLayout gameLayout;
@@ -61,10 +61,6 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
     private TextView playerTextView;
 
     private int progress= 0;
-
-    int[] squaresWon = new int[]{0, 0, 0, 0};
-
-
 
 
     //private SensorManager sm = null;
@@ -145,7 +141,11 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
             Log.v(TAG, "GAMETIME : " + gameTime);
             if(gameTime == 0){
                 progressBar.setProgress(progress);
+
+                dotsAndBoxes.changePlayer();
                 changePlayer();
+
+                resetTimer();
                 mp.stop();
                 mp = MediaPlayer.create(getBaseContext(), R.raw.clock);
                 mp.start();
@@ -159,21 +159,21 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
         playerTextView = (TextView) findViewById(R.id.playerTextView);
     }
 
-    private void changePlayer(){
-        dotsAndBoxes.changePlayer();
+    public void resetTimer() {
 
+        progress = 0;
+        gameTime = 15 * MS_ONE_SEC;
+        soundVolume = 4;
+    }
+
+    private void changePlayer(){
         if(dotsAndBoxes.isPlayer()){
             playerTextView.setText("Joueur A joue");
         }else{
             playerTextView.setText("Joueur B joue");
         }
-
-        progress = 0;
-        gameTime = 10 * MS_ONE_SEC;
-        soundVolume = 4;
-
-
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -230,19 +230,25 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
 
             int lineToPrint = dotsAndBoxes.addTrait(act,pointClick);
             if(lineToPrint > 0) {
+
                 drawTrait(lineToPrint);
                 markSquaresWon();
                 boolean redo = dotsAndBoxes.checkSquareComplete();
                 if(!redo) {
                     dotsAndBoxes.changePlayer();
+                    resetTimer();
+                    changePlayer(); //change string of curent player
+                }else{
+                    resetTimer();
+
+                }
+
+                if(dotsAndBoxes.gameEnd()){
+                    String winner = dotsAndBoxes.whoWins();
+                    toastMessage("Joueur "+winner+" is the winner");
                 }
 
                 turnEnd();
-                Log.v(TAG, "" + isTouch + "--" + act.toString() + "--" + pointClick + "--" + lineToPrint);
-
-                //TODO game end
-                if(dotsAndBoxes.gameEnd());
-
 
             }else{
                 //Turn not end error user

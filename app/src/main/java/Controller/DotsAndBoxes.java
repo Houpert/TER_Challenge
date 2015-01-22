@@ -82,6 +82,17 @@ public class DotsAndBoxes {
             return false;
     }
 
+    public String whoWins(){
+        if(nbSquareCompleteJ1 > nbSquareCompleteJ2)
+            return "A";
+        else if(nbSquareCompleteJ1 < nbSquareCompleteJ2)
+            return "B";
+        else if(nbSquareCompleteJ1 == nbSquareCompleteJ2)
+            return "A & B";
+        else
+            return "";
+    }
+
     public boolean checkSquareComplete(){
         int nbLineFind, nbTotalSquare = 0;
         for(int i=0; i<nbSquare; i++){
