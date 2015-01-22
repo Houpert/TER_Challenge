@@ -76,7 +76,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="A"
+            android:id="@+id/square1"
             />
         <ImageView
             android:layout_width="wrap_content"
@@ -88,7 +88,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="A"
+            android:id="@+id/square2"
             />
         <ImageView
             android:layout_width="wrap_content"
@@ -139,7 +139,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="A"
+            android:id="@+id/square3"
             />
         <ImageView
             android:layout_width="wrap_content"
@@ -151,7 +151,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="A"
+            android:id="@+id/square4"
             />
         <ImageView
             android:layout_width="wrap_content"

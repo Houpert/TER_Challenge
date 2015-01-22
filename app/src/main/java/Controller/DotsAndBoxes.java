@@ -109,6 +109,23 @@ public class DotsAndBoxes {
         return false;
     }
 
+    public int[] getSquaresWon(int[] res) {
+
+        if (res[0] == 0 && plateau[0][0].isDraw() && plateau[0][1].isDraw() && plateau[0][2].isDraw() && plateau[0][3].isDraw()) {
+            res[0] = isPlayer() ? 1 : 2;
+        }
+        if (res[1] == 0 && plateau[1][0].isDraw() && plateau[2][1].isDraw() && plateau[1][2].isDraw() && plateau[1][3].isDraw()) {
+            res[1] = isPlayer() ? 1 : 2;
+        }
+        if (res[2] == 0 && plateau[2][0].isDraw() && plateau[2][1].isDraw() && plateau[2][2].isDraw() && plateau[2][3].isDraw()) {
+            res[2] = isPlayer() ? 1 : 2;
+        }
+        if (res[3] == 0 && plateau[3][0].isDraw() && plateau[3][1].isDraw() && plateau[3][2].isDraw() && plateau[3][3].isDraw()) {
+            res[3] = isPlayer() ? 1 : 2;
+        }
+        return res;
+    }
+
 
 
     public int addTrait(Action action, int point){

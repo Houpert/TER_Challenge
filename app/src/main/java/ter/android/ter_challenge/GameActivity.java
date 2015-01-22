@@ -62,6 +62,10 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
 
     private int progress= 0;
 
+    int[] squaresWon = new int[]{0, 0, 0, 0};
+
+
+
 
     //private SensorManager sm = null;
 
@@ -196,6 +200,21 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
     public final void onAccuracyChanged(Sensor sensor, int accuracy) {
     }
 
+    private void markSquaresWon() {
+        TextView[] tv = new TextView[4];
+        tv[0] = (TextView) findViewById(R.id.square1);
+        tv[1] = (TextView) findViewById(R.id.square2);
+        tv[2] = (TextView) findViewById(R.id.square3);
+        tv[3] = (TextView) findViewById(R.id.square4);
+
+        squaresWon = dotsAndBoxes.getSquaresWon(squaresWon);
+        for (int i = 0; i < 4; i++) {
+            if (squaresWon[i] != 0) {
+                tv[i].setText(squaresWon[i] == 1 ? "A" : "B");
+            }
+        }
+    }
+
     @Override
     public final void onSensorChanged(SensorEvent event) {
         int sensor = event.sensor.getType();
@@ -212,6 +231,7 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
             int lineToPrint = dotsAndBoxes.addTrait(act,pointClick);
             if(lineToPrint > 0) {
                 drawTrait(lineToPrint);
+                markSquaresWon();
                 boolean redo = dotsAndBoxes.checkSquareComplete();
                 if(!redo) {
                     dotsAndBoxes.changePlayer();
