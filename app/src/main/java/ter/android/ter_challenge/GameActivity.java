@@ -1,6 +1,7 @@
 package ter.android.ter_challenge;
 
 import android.content.Context;
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -136,7 +137,7 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
                 soundVolume += 1;
             }
             mgr.setStreamVolume(AudioManager.STREAM_MUSIC, soundVolume, 0);
-            progress += 10;
+            progress += 7;
             progressBar.setProgress(progress);
             Log.v(TAG, "VOLUME : " + soundVolume);
             Log.v(TAG, "PROGRESS : " + progress);
@@ -248,6 +249,14 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
                 if(dotsAndBoxes.gameEnd()){
                     String winner = dotsAndBoxes.whoWins();
                     toastMessage("Joueur "+winner+" is the winner");
+
+
+                    mp.stop();
+                    Intent homeActivity = new Intent(this, HomeActivity.class);
+                    homeActivity.putExtra("winner","Joueur "+winner+" is the winner");
+                    startActivity(homeActivity);
+
+
                 }
 
                 turnEnd();
@@ -325,7 +334,6 @@ public class GameActivity extends ActionBarActivity implements SensorEventListen
         }
         return Action.EMPTY;
     }
-
 
     @Override
     protected void onResume() {

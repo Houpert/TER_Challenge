@@ -11,14 +11,21 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 
 public class HomeActivity extends ActionBarActivity{
+
+    private TextView txt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_layout);
+
+        String winner = (String) getIntent().getSerializableExtra("winner");
+        txt = (TextView) findViewById(R.id.msgWinner);
+        txt.setText(winner);
     }
 
 
